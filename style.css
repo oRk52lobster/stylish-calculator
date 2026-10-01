@@ -1,0 +1,174 @@
+:root {
+    --bg-main: #050510; /* Очень глубокий темный */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
+    --neon-primary: #00f2ff; /* Голубой неон */
+    --neon-secondary: #ff0055; /* Розовый неон */
+    --text-color: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Более современный шрифт */
+    font-weight: 300;
+}
+
+body {
+    background-color: var(--bg-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Эффектный фон (круги с блюром) */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.5;
+    z-index: -1;
+}
+
+body::before {
+    background: var(--neon-primary);
+    top: -10%;
+    left: -5%;
+    animation: float 10s infinite alternate;
+}
+
+body::after {
+    background: var(--neon-secondary);
+    bottom: -10%;
+    right: -5%;
+    animation: float 15s infinite alternate-reverse;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(30px) scale(1.1); }
+}.calculator-container {
+    padding: 20px;
+}
+
+.calculator {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px); /* Главная фишка: размытие фона позади */
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px; /* Скругления побольше */
+    box-shadow: var(--shadow-card);
+    width: 340px; /* Чуть шире */
+    overflow: hidden;
+    position: relative;
+}
+
+/* Тонкая подсветка по контуру (Border Glow) */
+.calculator::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    padding: 1px; /* толщина бордера */
+    background: linear-gradient(135deg, var(--neon-primary), transparent, var(--neon-secondary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+}.display {
+    background: rgba(0, 0, 0, 0.3); /* Глубокий черный внутри стекла */
+    color: var(--text-color);
+    font-size: 3.5em; /* Крупнее шрифт */
+    text-align: right;
+    padding: 40px 25px;
+    border-bottom: 1px solid var(--glass-border);
+    min-height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-weight: 100; /* Ультратонкий шрифт для цифр */
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px var(--neon-primary); /* Легкое свечение цифр */
+}.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px; /* Больше отступы между кнопками */
+    padding: 25px;
+}
+
+.btn {
+    background: rgba(255, 255, 255, 0.03); /* Полупрозрачные кнопки */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    padding: 22px;
+    font-size: 1.3em;
+    border-radius: 25px; /* Скругленные квадраты */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Более мягкий easing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Эффект нажатия */
+.btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Активные кнопки (операции / равно) --- */
+.btn.operator, .btn.equals {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Hover эффект для всех кнопок --- */
+.btn:hover {
+    border-color: var(--neon-primary); /* Рамка меняет цвет на неон */
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); /* Появляется свечение */
+    color: var(--neon-primary); /* Текст тоже светится */
+    background: rgba(0, 242, 255, 0.05);
+}
+
+/* --- Специальные цвета для действий (AC, DEL) --- */
+.btn.action {
+    color: var(--neon-secondary); /* Розовый неон для действий */
+}
+
+.btn.action:hover {
+    border-color: var(--neon-secondary);
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
+    color: var(--neon-secondary);
+    background: rgba(255, 0, 85, 0.05);
+}
+
+/* --- Кнопка "Равно" --- */
+.btn.equals {
+    background: linear-gradient(135deg, var(--neon-primary), var(--neon-secondary)); /* Градиент */
+    color: var(--bg-main); /* Темный текст на ярком фоне */
+    border: none;
+    font-weight: 500;
+}
+
+.btn.equals:hover {
+    box-shadow: 0 0 25px rgba(0, 242, 255, 0.8);
+    transform: translateY(-3).scale(1.02);
+    color: var(--bg-main);
+}
+
+/* --- Кнопка "0" --- */
+.btn.zero {
+    grid-column: span 2;
+    border-radius: 25px;
+}
